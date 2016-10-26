@@ -1,4 +1,4 @@
-import os, time, urllib.request
+import os, time, urllib.request, signal
 cversion = 0.2
 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
 nversion = open('version.txt', 'r')
