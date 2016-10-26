@@ -1,5 +1,5 @@
 import os, time, urllib.request
-cversion = 0.1
+cversion = 0.2
 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
 nversion = open('version.txt', 'r')
 nversion = float(nversion.read())
@@ -17,3 +17,4 @@ elif nversion == cversion:
     print("Currently up to date!")
 else:
     print("Are you some sort of time traveler?")
+time.sleep(2)
