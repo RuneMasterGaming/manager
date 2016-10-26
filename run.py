@@ -1,5 +1,5 @@
 import os, time, urllib.request
-cversion = 0.2
+cversion = 0.3
 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
 nversion = open('version.txt', 'r')
 nversion = float(nversion.read())
