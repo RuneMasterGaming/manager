@@ -3,21 +3,23 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.6
+    cversion = 0.7
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
     print("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
     if nversion > cversion:
-        os.remove("old_run.py")
-        for filename in os.listdir("."):
-            if filename.startswith("run"):
-                os.rename(filename, "old_run.py")
-                print("Updating to lastest version...")
-                time.sleep(1)
-                urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
-        time.sleep(1)
-        os.system("python run.py")
+        if os.path.isfile("./old_run.py") == True:
+            os.remove("old_run.py")
+        else:
+            for filename in os.listdir("."):
+                if filename.startswith("run"):
+                    os.rename(filename, "old_run.py")
+                    print("Updating to latest version...")
+                    time.sleep(1)
+                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
+            time.sleep(1)
+            os.system("python3 run.py")
     elif nversion == cversion:
         print("Currently up to date on version " + str(cversion))
     else:
@@ -72,12 +74,12 @@ try:
     from gi.repository import Gtk, GObject
 except ImportError:
     os.remove('fts.txt')
-    os.system('python run.py')
+    os.system('python3 run.py')
 
 class EntryWindow(Gtk.Window):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title="SG Password Manager v0.6")
+        Gtk.Window.__init__(self, title="SG Password Manager v0.7")
         self.set_size_request(400, 400)
 
         self.timeout_id = None
@@ -107,8 +109,12 @@ class EntryWindow(Gtk.Window):
         self.add(grid)
 
     def button_clicked(self, button):
-        key = entry.get_text()
-        self.get_key(key,pw)
+        mpw = entry.get_text()
+        self.decrypt_vault(mpw)
+
+    def decrypt_vault(self, mpw):
+
+
 updater()
 
 win = EntryWindow()
