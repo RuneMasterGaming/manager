@@ -20,8 +20,7 @@ def updater():
         print("Currently up to date on version " + str(cversion))
     else:
         print("Are you some sort of time traveler?")
-    if os.path.isfile('./version.txt') == True:
-        os.remove("version.txt")
+    os.remove("version.txt")
     time.sleep(2)
     ftsetup()
 
