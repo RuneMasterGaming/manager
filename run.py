@@ -48,11 +48,13 @@ def ftsetup():
         fts.write('false')
         print("changing to false")
         print("running first time setup")
-        os.system("sudo pip install simple-crypt")
         if platform == "linux":
             print("running on linux everything should work")
+            os.system("sudo pip install simple-crypt")
         elif platform == "win32":
-            print("Windows OS detected please download this installer, scan for viruses if needed...")
+            print("Windows OS detected installing dependencies...")
+            os.system("pip install simple-crypt")
+            print("Please download this installer, scan for viruses if needed...")
             print("Launching browser...")
             time.sleep(1)
             print("after installing press any key to continue...")
@@ -85,6 +87,7 @@ except ImportError:
     if platform == 'linux':
         os.system('python3 run.py')
     elif platform == 'win32':
+        print("Error, Not Detected!")
         os.system('run.py')
 
 class EntryWindow(Gtk.Window):
