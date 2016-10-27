@@ -7,12 +7,13 @@ def updater():
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
+    print("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
     if nversion > cversion:
         os.remove("old_run.py")
         for filename in os.listdir("."):
             if filename.startswith("run"):
                 os.rename(filename, "old_run.py")
-                print("Installing newest version...")
+                print("renamed old manager")
                 time.sleep(1)
                 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
         time.sleep(1)
