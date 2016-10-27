@@ -14,10 +14,11 @@ def updater():
                 print("renamed old manager")
                 time.sleep(1)
                 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
-        time.sleep(1)        
-        os.system("python run.py")
+        os.system("nohup python run.py &")
+        time.sleep(1)
+        os.kill(os.getppid(), signal.SIGHUP)
     elif nversion == cversion:
-        print("Currently up to date on version" + cversion)
+        print("Currently up to date on version" + str(cversion))
     else:
         print("Are you some sort of time traveler?")
     os.remove("version.txt")
