@@ -3,7 +3,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.5
+    cversion = 0.6
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
@@ -20,7 +20,7 @@ def updater():
     elif nversion == cversion:
         print("Currently up to date on version " + str(cversion))
     else:
-        print("Are you some sort of time traveler?")
+        print("Developer Version Detected! Not Updating!")
     if os.path.isfile('./version.txt') == True:
         os.remove("version.txt")
     time.sleep(2)
@@ -42,7 +42,7 @@ def ftsetup():
         fts.write('false')
         print("changing to false")
         print("running first time setup")
-        os.system("pip install simple-crypt")
+        os.system("sudo pip install simple-crypt")
         if platform == "linux":
             print("running on linux everything should work")
         elif platform == "win32":
@@ -57,18 +57,60 @@ def ftsetup():
 <interface>
   <requires lib="gtk+" version="3.20"/>
 </interface>""")
-
     elif ftscheck == false:
         config = open('config.glade', 'a')
         print("is false")
     else:
         print("wtf?")
     fts.close
-updater()
+
 try:
+    import gi
     from simplecrypt import encrypt, decrypt
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk, GObject
 except ImportError:
     os.remove('fts.txt')
     os.system('python run.py')
+
+class EntryWindow(Gtk.Window):
+
+    def __init__(self):
+        Gtk.Window.__init__(self, title="SG Password Manager v0.6")
+        self.set_size_request(400, 400)
+
+        self.timeout_id = None
+
+        global entry
+        entry = Gtk.Entry()
+        entry.set_placeholder_text("Enter Master Password")
+        entry.set_visibility(False)
+
+
+        button = Gtk.Button(label="Launch")
+        button.connect("clicked", self.button_clicked)
+
+        self.statusbar = Gtk.Statusbar()
+        self.context_id = self.statusbar.get_context_id("example")
+        self.statusbar.push(
+            self.context_id, "Waiting For Password")
+
+        grid = Gtk.Grid()
+        grid.set_column_spacing(5)
+        grid.set_column_homogeneous(True)
+        grid.set_row_homogeneous(True)
+        grid.attach(entry, 0, 0, 2, 1)
+        grid.attach(button, 0, 1, 2, 1)
+        grid.attach(self.statusbar, 0, 2, 2, 1)
+
+        self.add(grid)
+
+    def button_clicked(self, button):
+        key = entry.get_text()
+        self.get_key(key,pw)
+updater()
+
+win = EntryWindow()
+win.connect("delete-event", Gtk.main_quit)
+win.show_all()
+Gtk.main()
