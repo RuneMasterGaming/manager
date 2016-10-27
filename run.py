@@ -1,4 +1,5 @@
 import os, time, urllib.request, io
+from sys import platform
 true = 'true'
 false = 'false'
 def updater():
@@ -42,6 +43,15 @@ def ftsetup():
         print("changing to false")
         print("running first time setup")
         os.system("pip install simple-crypt")
+        if platform == "linux":
+            print("running on linux everything should work")
+        elif platform == "win32":
+            print("Windows OS detected please download this installer, scan for viruses if needed...")
+            print("Launching browser...")
+            time.sleep(1)
+            os.system('python -m webbrowser -n "https://sourceforge.net/projects/pygobjectwin32/files/?source=navbar"')
+        elif platform == "darwin":
+            print("[WARNING]: Unsupported Version, use at your own risk!")
         config.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
@@ -54,5 +64,11 @@ def ftsetup():
     else:
         print("wtf?")
     fts.close
-
 updater()
+try:
+    from simplecrypt import encrypt, decrypt
+    gi.require_version('Gtk', '3.0')
+    from gi.repository import Gtk, GObject
+except ImportError:
+    os.remove('fts.txt')
+    os.system('python run.py')
