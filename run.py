@@ -4,6 +4,7 @@ urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/m
 nversion = open('version.txt', 'r')
 nversion = float(nversion.read())
 if nversion > cversion:
+    os.remove("old_run.py")
     for filename in os.listdir("."):
         if filename.startswith("run"):
             os.rename(filename, "old_run.py")
