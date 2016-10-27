@@ -1,4 +1,4 @@
-import os, time, urllib.request, io
+import os, time, urllib.request, io, webbrowser
 from sys import platform
 true = 'true'
 false = 'false'
@@ -19,7 +19,10 @@ def updater():
                     time.sleep(1)
                     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
             time.sleep(1)
-            os.system("python3 run.py")
+            if platform == 'linux':
+                os.system('python3 run.py')
+            elif platform == 'win32':
+                os.system('run.py')
     elif nversion == cversion:
         print("Currently up to date on version " + str(cversion))
     else:
@@ -52,7 +55,7 @@ def ftsetup():
             print("Windows OS detected please download this installer, scan for viruses if needed...")
             print("Launching browser...")
             time.sleep(1)
-            os.system('python -m webbrowser -n "https://sourceforge.net/projects/pygobjectwin32/files/?source=navbar"')
+            webbrowser.open("https://sourceforge.net/projects/pygobjectwin32/files/?source=navbar"[, new=0[, autoraise=True]])
         elif platform == "darwin":
             print("[WARNING]: Unsupported Version, use at your own risk!")
         config.write("""<?xml version="1.0" encoding="UTF-8"?>
@@ -75,7 +78,10 @@ try:
     from gi.repository import Gtk, GObject
 except ImportError:
     os.remove('fts.txt')
-    os.system('python3 run.py')
+    if platform == 'linux':
+        os.system('python3 run.py')
+    elif platform == 'win32':
+        os.system('run.py')
 
 class EntryWindow(Gtk.Window):
 
