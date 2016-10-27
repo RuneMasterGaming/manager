@@ -113,7 +113,7 @@ class EntryWindow(Gtk.Window):
         self.decrypt_vault(mpw)
 
     def decrypt_vault(self, mpw):
-
+        print("triffle is a scrub")
 
 updater()
 
