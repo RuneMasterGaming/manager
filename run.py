@@ -68,6 +68,7 @@ def ftsetup():
     fts.close
 
 try:
+    updater()
     import gi
     from simplecrypt import encrypt, decrypt
     gi.require_version('Gtk', '3.0')
@@ -114,8 +115,6 @@ class EntryWindow(Gtk.Window):
 
     def decrypt_vault(self, mpw):
         print("triffle is a scrub")
-
-updater()
 
 win = EntryWindow()
 win.connect("delete-event", Gtk.main_quit)
