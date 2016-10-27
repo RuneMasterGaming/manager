@@ -3,7 +3,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.7
+    cversion = 0.8
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
