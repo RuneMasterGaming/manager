@@ -12,7 +12,7 @@ def updater():
         for filename in os.listdir("."):
             if filename.startswith("run"):
                 os.rename(filename, "old_run.py")
-                print("renamed old manager")
+                print("Installing newest version...")
                 time.sleep(1)
                 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
         time.sleep(1)
