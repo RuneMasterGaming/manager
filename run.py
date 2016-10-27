@@ -3,7 +3,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.8
+    cversion = 0.7
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
@@ -56,6 +56,8 @@ def ftsetup():
             print("Launching browser...")
             time.sleep(1)
             webbrowser.open("https://sourceforge.net/projects/pygobjectwin32/files/?source=navbar", new=0, autoraise=True)
+            import msvcrt as m
+            m.getch()
         elif platform == "darwin":
             print("[WARNING]: Unsupported Version, use at your own risk!")
         config.write("""<?xml version="1.0" encoding="UTF-8"?>
