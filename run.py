@@ -1,4 +1,4 @@
-import os, time, urllib.request, io, signal
+import os, time, urllib.request, io
 true = 'true'
 false = 'false'
 def updater():
@@ -14,9 +14,8 @@ def updater():
                 print("renamed old manager")
                 time.sleep(1)
                 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
-        os.system("nohup python run.py &")
-        time.sleep(1)
-        os.kill(os.getppid(), signal.SIGHUP)
+        time.sleep(1)        
+        os.system("python run.py")
     elif nversion == cversion:
         print("Currently up to date on version" + cversion)
     else:
