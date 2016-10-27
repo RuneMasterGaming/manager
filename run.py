@@ -41,6 +41,7 @@ def ftsetup():
         fts.write('false')
         print("changing to false")
         print("running first time setup")
+        os.system("pip install simple-crypt")
         config.write("""<?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.20.0 -->
 <interface>
@@ -53,4 +54,5 @@ def ftsetup():
     else:
         print("wtf?")
     fts.close
+
 updater()
