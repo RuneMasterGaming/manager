@@ -18,7 +18,6 @@ def updater():
                 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
         time.sleep(1)
         os.system("python run.py")
-        os.exit
     elif nversion == cversion:
         print("Currently up to date on version " + str(cversion))
     else:
