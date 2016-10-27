@@ -1,4 +1,4 @@
-import os, time, urllib.request, io
+import os, time, urllib.request, io, signal
 true = 'true'
 false = 'false'
 def updater():
