@@ -2,7 +2,7 @@ import os, time, urllib.request, io
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.4
+    cversion = 0.3
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
@@ -18,7 +18,7 @@ def updater():
         time.sleep(1)
         os.kill(os.getppid(), signal.SIGHUP)
     elif nversion == cversion:
-        print("Currently up to date!")
+        print("Currently up to date on version" + cversion)
     else:
         print("Are you some sort of time traveler?")
     os.remove("version.txt")
