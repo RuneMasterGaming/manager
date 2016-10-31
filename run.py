@@ -54,16 +54,28 @@ def ftsetup():
         elif platform == "win32":
             print("Windows OS detected installing dependencies...")
             os.system("pip install simple-crypt")
-            print("Please download this installer, scan for viruses if needed...")
+            print("Install the right version for the current python version you have.")
+            print("Current Version:")
+            os.system('python --verison')
             print("Launching browser...")
             time.sleep(1)
             print("after installing press any key to continue...")
             time.sleep(2)
-            webbrowser.open("https://sourceforge.net/projects/pygobjectwin32/files/?source=navbar", new=0, autoraise=True)
+            webbrowser.open("https://sourceforge.net/projects/pywin32/files/pywin32/Build%20220/", new=0, autoraise=True)
             import msvcrt as m
             m.getch()
         elif platform == "darwin":
             print("[WARNING]: Unsupported Version, use at your own risk!")
+        print("In order for your passwords to be stored safely please Enter a master password!")
+        global mpw
+        mpw = getpas.getpass("Enter Password: ")
+        mpwcheck = getpass.getpass("Enter again: ")
+        if mpw == mpwcheck:
+            print("Passowrds Match!")
+        else:
+            print("[Error]: passwords do not match!")
+        del mpwcheck
+
     elif ftscheck == false:
         print("is false")
     else:
@@ -123,18 +135,54 @@ if platform == 'linux':
                 vaultstr = str(vaultutf)
                 pwlist = open('.tmp.tmp', 'w+')
                 pwlist.write(vaultstr)
-                pwlistdata = vaultstr
-                self.load_vault(pwlistdata)
+                pwfile = vaultstr
+                print(vaultstr)
+                self.load_vault(pwfile)
 
-            def load_vault(self, pwlistdata):
+            def load_vault(self, pwfile):
+                account = ''
                 print("Unlocking")
-                print(pwlistdata)
-                os.remove('.tmp.tmp')
+                pwfile2 = str(pwfile)
+                pwfile2 = pwfile.strip()
+                while (account != 'quit') and (account != 'add'):
+                    account = input("Search For Account: ")
+                    for line in pwfile2.splitlines():
+                        pw = line.split(",")
+                        name = pw[len(pw)-3]
+                        user = pw[len(pw)-2]
+                        psw = pw[len(pw)-1]
+                        if name == account:
+                            print('Website: ' + str(name))
+                            print('Username: ' + str(user))
+                            print('Password: ' + str(psw))
+                if account == 'quit':
+                    self.lock_vault()
+                elif account == 'add':
+                    pwlist = open('.tmp.tmp', 'a')
+                    entry = input("Enter 'website,username,password' : ")
+                    pwlist.write(pwfile)
+                    pwlist.write(entry + '\n')
+                    pwlist.close
+                    pwlist = open('.tmp.tmp', 'r')
+                    pwlistdata = pwlist.read()
+                    print(pwlistdata)
+                    pwliststr = str(pwlistdata)
+                    ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
+                    ciphertext = hexlify(ciphertext)
+                    ciphertext = str(ciphertext)
+                    ciphertext = ciphertext.upper()
+                    ciphertext = ciphertext.lstrip("B'")
+                    ciphertext = ciphertext.rstrip("'")
+                    vault = open('.pwlist.pw', 'w+')
+                    vault.write(ciphertext)
+                    pwfile = pwliststr
+                    self.load_vault(pwfile)
 
 
-
-            def lock_vault(self, mpw):
+            def lock_vault(self):
                 print("Locking")
+                os.remove('.tmp.tmp')
+                exit()
 
         win = EntryWindow()
         win.connect("delete-event", Gtk.main_quit)
@@ -148,23 +196,51 @@ elif platform == 'win32':
     try:
         updater()
         print("Running on Windows no gui support")
-        decrypt()
+        win_decrypt()
     except KeyboardInterrupt:
         print("Closing")
 
 def windows(pwfile):
-    pwfile = str(pwfile)
-    pwfile = pwfile.strip()
-    pw = pwfile.split(",")
-    name = pw[len(pw)-3]
-    user = pw[len(pw)-2]
-    psw = pw[len(pw)-1]
-    print('Website: ' + str(name))
-    print('Username: ' + str(user))
-    print('Password: ' + str(psw))
+    account = ''
+    print("Unlocking")
+    pwfile2 = str(pwfile)
+    pwfile2 = pwfile.strip()
+    while (account != 'quit') and (account != 'add'):
+        account = input("Search For Account: ")
+        for line in pwfile2.splitlines():
+            pw = line.split(",")
+            name = pw[len(pw)-3]
+            user = pw[len(pw)-2]
+            psw = pw[len(pw)-1]
+            if name == account:
+                print('Website: ' + str(name))
+                print('Username: ' + str(user))
+                print('Password: ' + str(psw))
+    if account == 'quit':
+        self.lock_vault()
+    elif account == 'add':
+        pwlist = open('.tmp.tmp', 'a')
+        entry = input("Enter 'website,username,password' : ")
+        pwlist.write(pwfile)
+        pwlist.write(entry + '\n')
+        pwlist.close
+        pwlist = open('.tmp.tmp', 'r')
+        pwlistdata = pwlist.read()
+        print(pwlistdata)
+        pwliststr = str(pwlistdata)
+        ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
+        ciphertext = hexlify(ciphertext)
+        ciphertext = str(ciphertext)
+        ciphertext = ciphertext.upper()
+        ciphertext = ciphertext.lstrip("B'")
+        ciphertext = ciphertext.rstrip("'")
+        vault = open('.pwlist.pw', 'w+')
+        vault.write(ciphertext)
+        pwfile = pwliststr
+        windows(pwfile)
 
 
-def decrypt():
+def win_decrypt():
     mpw = getpass.getpass("Please Enter Master Password")
     vault = open('.pwlist.pw','r')
     vaultdata = vault.read()
