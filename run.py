@@ -193,58 +193,58 @@ if platform == 'linux':
         os.system("python3 run.py")
 
 elif platform == 'win32':
-def windows(pwfile):
-    account = ''
-    print("Unlocking")
-    pwfile2 = str(pwfile)
-    pwfile2 = pwfile.strip()
-    while (account != 'quit') and (account != 'add'):
-        account = input("Search For Account: ")
-        for line in pwfile2.splitlines():
-            pw = line.split(",")
-            name = pw[len(pw)-3]
-            user = pw[len(pw)-2]
-            psw = pw[len(pw)-1]
-            if name == account:
-                print('Website: ' + str(name))
-                print('Username: ' + str(user))
-                print('Password: ' + str(psw))
-    if account == 'quit':
-        self.lock_vault()
-    elif account == 'add':
-        pwlist = open('.tmp.tmp', 'a')
-        entry = input("Enter 'website,username,password' : ")
-        pwlist.write(pwfile)
-        pwlist.write(entry + '\n')
-        pwlist.close
-        pwlist = open('.tmp.tmp', 'r')
-        pwlistdata = pwlist.read()
-        print(pwlistdata)
-        pwliststr = str(pwlistdata)
-        ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
-        ciphertext = hexlify(ciphertext)
-        ciphertext = str(ciphertext)
-        ciphertext = ciphertext.upper()
-        ciphertext = ciphertext.lstrip("B'")
-        ciphertext = ciphertext.rstrip("'")
-        vault = open('.pwlist.pw', 'w+')
-        vault.write(ciphertext)
-        pwfile = pwliststr
+    def windows(pwfile):
+        account = ''
+        print("Unlocking")
+        pwfile2 = str(pwfile)
+        pwfile2 = pwfile.strip()
+        while (account != 'quit') and (account != 'add'):
+            account = input("Search For Account: ")
+            for line in pwfile2.splitlines():
+                pw = line.split(",")
+                name = pw[len(pw)-3]
+                user = pw[len(pw)-2]
+                psw = pw[len(pw)-1]
+                if name == account:
+                    print('Website: ' + str(name))
+                    print('Username: ' + str(user))
+                    print('Password: ' + str(psw))
+        if account == 'quit':
+            self.lock_vault()
+        elif account == 'add':
+            pwlist = open('.tmp.tmp', 'a')
+            entry = input("Enter 'website,username,password' : ")
+            pwlist.write(pwfile)
+            pwlist.write(entry + '\n')
+            pwlist.close
+            pwlist = open('.tmp.tmp', 'r')
+            pwlistdata = pwlist.read()
+            print(pwlistdata)
+            pwliststr = str(pwlistdata)
+            ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
+            ciphertext = hexlify(ciphertext)
+            ciphertext = str(ciphertext)
+            ciphertext = ciphertext.upper()
+            ciphertext = ciphertext.lstrip("B'")
+            ciphertext = ciphertext.rstrip("'")
+            vault = open('.pwlist.pw', 'w+')
+            vault.write(ciphertext)
+            pwfile = pwliststr
+            windows(pwfile)
+
+
+    def win_decrypt():
+        mpw = getpass.getpass("Please Enter Master Password")
+        vault = open('.pwlist.pw','r')
+        vaultdata = vault.read()
+        vaulthex = unhexlify(vaultdata)
+        vaultdec = decrypt(mpw, vaulthex)
+        vaultutf = vaultdec.decode('utf8')
+        vaultstr = str(vaultutf)
+        pwlist = open('.tmp.tmp', 'w+')
+        pwlist.write(vaultstr)
+        pwfile = vaultstr
         windows(pwfile)
-
-
-def win_decrypt():
-    mpw = getpass.getpass("Please Enter Master Password")
-    vault = open('.pwlist.pw','r')
-    vaultdata = vault.read()
-    vaulthex = unhexlify(vaultdata)
-    vaultdec = decrypt(mpw, vaulthex)
-    vaultutf = vaultdec.decode('utf8')
-    vaultstr = str(vaultutf)
-    pwlist = open('.tmp.tmp', 'w+')
-    pwlist.write(vaultstr)
-    pwfile = vaultstr
-    windows(pwfile)
 
     try:
         updater()
