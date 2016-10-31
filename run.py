@@ -1,9 +1,10 @@
 import os, time, urllib.request, io, webbrowser
+from binascii import hexlify, unhexlify
 from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.8
+    cversion = 0.9
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversion = open('version.txt', 'r')
     nversion = float(nversion.read())
@@ -43,7 +44,6 @@ def ftsetup():
     if ftscheck == true:
         print("is true")
         fts.close
-        config = open('config.glade', 'w+')
         fts = open('fts.txt', 'w+')
         fts.write('false')
         print("changing to false")
@@ -64,72 +64,115 @@ def ftsetup():
             m.getch()
         elif platform == "darwin":
             print("[WARNING]: Unsupported Version, use at your own risk!")
-        config.write("""<?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
-<interface>
-  <requires lib="gtk+" version="3.20"/>
-</interface>""")
     elif ftscheck == false:
-        config = open('config.glade', 'a')
         print("is false")
     else:
         print("wtf?")
     fts.close
 
-try:
-    updater()
-    import gi
-    from simplecrypt import encrypt, decrypt
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk, GObject
-except ImportError:
-    os.remove('fts.txt')
-    if platform == 'linux':
-        os.system('python3 run.py')
-    elif platform == 'win32':
-        print("Error, Not Detected!")
-        os.system('run.py')
+if platform == 'linux':
+    try:
+        updater()
+        import gi
+        from simplecrypt import encrypt, decrypt
+        gi.require_version('Gtk', '3.0')
+        from gi.repository import Gtk, GObject
+        class EntryWindow(Gtk.Window):
 
-class EntryWindow(Gtk.Window):
+            def __init__(self):
+                Gtk.Window.__init__(self, title="SG Password Manager v0.9")
+                self.set_size_request(400, 400)
 
-    def __init__(self):
-        Gtk.Window.__init__(self, title="SG Password Manager v0.7")
-        self.set_size_request(400, 400)
+                self.timeout_id = None
 
-        self.timeout_id = None
-
-        global entry
-        entry = Gtk.Entry()
-        entry.set_placeholder_text("Enter Master Password")
-        entry.set_visibility(False)
+                global entry
+                entry = Gtk.Entry()
+                entry.set_placeholder_text("Enter Master Password")
+                entry.set_visibility(False)
 
 
-        button = Gtk.Button(label="Launch")
-        button.connect("clicked", self.button_clicked)
+                button = Gtk.Button(label="Unlock")
+                button.connect("clicked", self.button_clicked)
 
-        self.statusbar = Gtk.Statusbar()
-        self.context_id = self.statusbar.get_context_id("example")
-        self.statusbar.push(
-            self.context_id, "Waiting For Password")
+                self.statusbar = Gtk.Statusbar()
+                self.context_id = self.statusbar.get_context_id("example")
+                self.statusbar.push(
+                    self.context_id, "Waiting For Password")
 
-        grid = Gtk.Grid()
-        grid.set_column_spacing(5)
-        grid.set_column_homogeneous(True)
-        grid.set_row_homogeneous(True)
-        grid.attach(entry, 0, 0, 2, 1)
-        grid.attach(button, 0, 1, 2, 1)
-        grid.attach(self.statusbar, 0, 2, 2, 1)
+                grid = Gtk.Grid()
+                grid.set_column_spacing(5)
+                grid.set_column_homogeneous(True)
+                grid.set_row_homogeneous(True)
+                grid.attach(entry, 0, 0, 2, 1)
+                grid.attach(button, 0, 1, 2, 1)
+                grid.attach(self.statusbar, 0, 2, 2, 1)
 
-        self.add(grid)
+                self.add(grid)
 
-    def button_clicked(self, button):
-        mpw = entry.get_text()
-        self.decrypt_vault(mpw)
+            def button_clicked(self, button):
+                global mpw
+                mpw = entry.get_text()
+                self.decrypt_vault(mpw)
 
-    def decrypt_vault(self, mpw):
-        print("triffle is a scrub")
+            def decrypt_vault(self, mpw):
+                vault = open('.pwlist.pw','r')
+                vaultdata = vault.read()
+                vaulthex = unhexlify(vaultdata)
+                vaultdec = decrypt(mpw, vaulthex)
+                vaultutf = vaultdec.decode('utf8')
+                vaultstr = str(vaultutf)
+                pwlist = open('.tmp.tmp', 'w+')
+                pwlist.write(vaultstr)
+                pwlistdata = vaultstr
+                self.load_vault(pwlistdata)
 
-win = EntryWindow()
-win.connect("delete-event", Gtk.main_quit)
-win.show_all()
-Gtk.main()
+            def load_vault(self, pwlistdata):
+                print("Unlocking")
+                print(pwlistdata)
+                os.remove('.tmp.tmp')
+
+
+
+            def lock_vault(self, mpw):
+                print("Locking")
+
+        win = EntryWindow()
+        win.connect("delete-event", Gtk.main_quit)
+        win.show_all()
+        Gtk.main()
+    except ImportError:
+        os.remove('fts.txt')
+        os.system("python3 run.py")
+
+elif platform == 'win32':
+    try:
+        updater()
+        print("Running on Windows no gui support")
+        decrypt()
+    except KeyboardInterrupt:
+        print("Closing")
+
+def windows(pwfile):
+    pwfile = str(pwfile)
+    pwfile = pwfile.strip()
+    pw = pwfile.split(",")
+    name = pw[len(pw)-3]
+    user = pw[len(pw)-2]
+    psw = pw[len(pw)-1]
+    print('Website: ' + str(name))
+    print('Username: ' + str(user))
+    print('Password: ' + str(psw))
+
+
+def decrypt():
+    mpw = getpass.getpass("Please Enter Master Password")
+    vault = open('.pwlist.pw','r')
+    vaultdata = vault.read()
+    vaulthex = unhexlify(vaultdata)
+    vaultdec = decrypt(mpw, vaulthex)
+    vaultutf = vaultdec.decode('utf8')
+    vaultstr = str(vaultutf)
+    pwlist = open('.tmp.tmp', 'w+')
+    pwlist.write(vaultstr)
+    pwfile = vaultstr
+    windows(pwfile)
