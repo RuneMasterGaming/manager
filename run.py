@@ -193,13 +193,6 @@ if platform == 'linux':
         os.system("python3 run.py")
 
 elif platform == 'win32':
-    try:
-        updater()
-        print("Running on Windows no gui support")
-        win_decrypt()
-    except KeyboardInterrupt:
-        print("Closing")
-
 def windows(pwfile):
     account = ''
     print("Unlocking")
@@ -252,3 +245,10 @@ def win_decrypt():
     pwlist.write(vaultstr)
     pwfile = vaultstr
     windows(pwfile)
+
+    try:
+        updater()
+        print("Running on Windows no gui support")
+        win_decrypt()
+    except KeyboardInterrupt:
+        print("Closing")
