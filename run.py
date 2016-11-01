@@ -4,12 +4,32 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = 0.9
+    cversion = '0.9.4.none'
+    cversion = str(cversion).split(".")
+    cmv = int(cversion[len(cversion)-4])
+    csv = int(cversion[len(cversion)-3])
+    chf = int(cversion[len(cversion)-2])
+    cmode = str(cversion[len(cversion)-1])
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
-    nversion = open('version.txt', 'r')
-    nversion = float(nversion.read())
+    nversiondata = open('version.txt', 'r')
+    nversionreadun = nversiondata.read()
+    nversionread = str(nversionreadun).strip()
+    nversion = str(nversionread).split(".")
+    mv = int(nversion[len(nversion)-4])
+    sv = int(nversion[len(nversion)-3])
+    hf = int(nversion[len(nversion)-2])
+    mode = str(nversion[len(nversion)-1])
+    if (mode == 'pre') or (mode == 'beta') or (mode == 'dev'):
+        nversion = str(str(mode) + "-" + str(mv) + "." + str(sv) + "." + str(hf))
+    else:
+        nversion = str(str(mv) + "." + str(sv) + "." + str(hf))
+
+    if (cmode == 'pre') or (cmode == 'beta') or (cmode == 'dev'):
+        cversion = str(str(cmode) + "-" + str(cmv) + "." + str(csv) + "." + str(chf))
+    else:
+        cversion = str(str(cmv) + "." + str(csv) + "." + str(chf))
     print("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
-    if nversion > cversion:
+    if (mv > cmv) or (sv > csv) or (hf > chf):
         if os.path.isfile("./old_run.py") == True:
             os.remove("old_run.py")
         else:
@@ -88,7 +108,71 @@ if platform == 'linux':
         import gi
         from simplecrypt import encrypt, decrypt
         gi.require_version('Gtk', '3.0')
-        from gi.repository import Gtk, GObject
+        from gi.repository import Gtk, GObject, Gdk
+
+        class DialogExample(Gtk.Window):
+            def __init__(self, name, user, psw):
+                Gtk.Window.__init__(self, title=name)
+                self.set_default_size(300, 100)
+
+                self.timeout_id = None
+
+                entry1 = Gtk.Entry()
+                entry1.set_editable(False)
+                entry1.set_text(user)
+
+                global entry2
+                entry2 = Gtk.Entry()
+                entry2.set_editable(False)
+                entry2.set_text(psw)
+                entry2.set_visibility(False)
+
+                visibutton = Gtk.CheckButton()
+                visibutton.set_label("Show Password")
+                visibutton.connect("toggled", self.toggled_visibility)
+                visibutton.set_active(False)
+
+                clipboard = Gtk.Button(label="Copy")
+                clipboard.connect("clicked", self.copy_clipboard)
+
+                grid1 = Gtk.Grid()
+                grid1.set_column_spacing(5)
+                grid1.set_column_homogeneous(True)
+                grid1.set_row_homogeneous(True)
+                grid1.attach(entry1, 0, 0, 1, 1)
+                grid1.attach_next_to(entry2, entry1, Gtk.PositionType.RIGHT, 1, 1)
+                grid1.attach_next_to(visibutton, entry2, Gtk.PositionType.RIGHT, 1, 1)
+                grid1.attach_next_to(clipboard, visibutton, Gtk.PositionType.BOTTOM, 1, 1)
+
+                self.add(grid1)
+
+            def toggled_visibility(self, button):
+                if button.get_active():
+                    entry2.set_visibility(True)
+                else:
+                    entry2.set_visibility(False)
+
+            def copy_clipboard(self, button):
+                atom = Gdk.atom_intern('CLIPBOARD', True)
+                clip = entry2.get_clipboard(atom)
+                clip.set_text(entry2.get_text(), -1)
+
+                print("Copied to Clipboard")
+                kill = open(".kill.py", 'w+')
+                kill.write("""import time, gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, GObject, Gdk
+time.sleep(20)
+entry = Gtk.Entry()
+atom = Gdk.atom_intern('CLIPBOARD', True)
+clip = entry.get_clipboard(atom)
+clip.set_text("", -1)
+""")
+                kill.close
+                os.system("nohup python3 .kill.py &")
+                print("Clipboard will be cleared after 20 seconds")
+
+
         class EntryWindow(Gtk.Window):
 
             def __init__(self):
@@ -132,11 +216,8 @@ if platform == 'linux':
                 vaulthex = unhexlify(vaultdata)
                 vaultdec = decrypt(mpw, vaulthex)
                 vaultutf = vaultdec.decode('utf8')
-                vaultstr = str(vaultutf)
+                pwfile = str(vaultutf)
                 pwlist = open('.tmp.tmp', 'w+')
-                pwlist.write(vaultstr)
-                pwfile = vaultstr
-                print(vaultstr)
                 self.load_vault(pwfile)
 
             def load_vault(self, pwfile):
@@ -152,21 +233,29 @@ if platform == 'linux':
                         user = pw[len(pw)-2]
                         psw = pw[len(pw)-1]
                         if name == account:
-                            print('Website: ' + str(name))
-                            print('Username: ' + str(user))
-                            print('Password: ' + str(psw))
+                            self.show_account(name,user,psw)
                 if account == 'quit':
                     self.lock_vault()
                 elif account == 'add':
                     pwlist = open('.tmp.tmp', 'a')
-                    entry = input("Enter 'website,username,password' : ")
+                    nentry = input("Enter Website: ")
+                    uentry = input("Enter Username: ")
+                    pentry = getpass.getpass("Enter Password: ")
+                    pentrycheck = getpass.getpass("Enter Password Again: ")
+                    while pentry != pentrycheck:
+                        print("Passwords don't match! Try again")
+                        pentry = getpass.getpass("Enter Password: ")
+                        pentrycheck = getpass.getpass("Enter Password Again: ")
+                    entry = str(nentry + "," + uentry + "," + pentry)
                     pwlist.write(pwfile)
                     pwlist.write(entry + '\n')
                     pwlist.close
                     pwlist = open('.tmp.tmp', 'r')
                     pwlistdata = pwlist.read()
-                    print(pwlistdata)
                     pwliststr = str(pwlistdata)
+                    pwlist.close
+                    if os.path.isfile("./.tmp.tmp") == True:
+                        os.remove(".tmp.tmp")
                     ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
                     ciphertext = hexlify(ciphertext)
                     ciphertext = str(ciphertext)
@@ -181,8 +270,16 @@ if platform == 'linux':
 
             def lock_vault(self):
                 print("Locking")
-                os.remove('.tmp.tmp')
+                if os.path.isfile("./.tmp.tmp") == True:
+                    os.remove('.tmp.tmp')
                 exit()
+
+            def show_account(self, name, user, psw):
+                dialog = DialogExample(name, user, psw)
+                dialog.connect("delete-event", Gtk.main_quit)
+                dialog.show_all()
+                Gtk.main()
+
 
         win = EntryWindow()
         win.connect("delete-event", Gtk.main_quit)
@@ -191,6 +288,9 @@ if platform == 'linux':
     except ImportError:
         os.remove('fts.txt')
         os.system("python3 run.py")
+    except  KeyboardInterrupt:
+        print("Shutting Down")
+        exit()
 
 elif platform == 'win32':
     def windows(pwfile):
@@ -213,7 +313,14 @@ elif platform == 'win32':
             self.lock_vault()
         elif account == 'add':
             pwlist = open('.tmp.tmp', 'a')
-            entry = input("Enter 'website,username,password' : ")
+            nentry = input("Enter Website: ")
+            uentry = input("Enter Username: ")
+            pentry = getpass.getpass("Enter Password: ")
+            pentrycheck = getpass.getpass("Enter Password Again: ")
+            while pentry != pentrycheck:
+                print("Passwords don't match! Try again")
+                pentry = getpass.getpass("Enter Password: ")
+                pentrycheck = getpass.getpass("Enter Password Again: ")
             pwlist.write(pwfile)
             pwlist.write(entry + '\n')
             pwlist.close
