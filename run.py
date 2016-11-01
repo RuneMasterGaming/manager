@@ -4,7 +4,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = '0.9.45.dev'
+    cversion = '0.9.46.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -46,8 +46,10 @@ def updater():
                 os.system('run.py')
     elif nversion == cversion:
         print("Currently up to date on version " + str(cversion))
-    else:
+    elif mode == 'dev':
         print("Developer Version Detected! Not Updating!")
+    else:
+        print("[Error]: Unrecognized mode")
     if os.path.isfile('./version.txt') == True:
         os.remove("version.txt")
     time.sleep(2)
