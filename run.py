@@ -366,7 +366,8 @@ clip.set_text("", -1)
         win.show_all()
         Gtk.main()
     except ImportError:
-        os.remove('fts.txt')
+        if os.path.isfile("./fts.txt") == True:
+            os.remove('fts.txt')
         os.system("python3 run.py")
     except  KeyboardInterrupt:
         info = "Shutting Down..."
