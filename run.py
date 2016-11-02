@@ -3,8 +3,19 @@ from binascii import hexlify, unhexlify
 from sys import platform
 true = 'true'
 false = 'false'
+
+def log(info):
+    info = str(info)
+    if os.path.isfile('./log.txt') == True:
+        logdata = open("log.txt", 'a')
+        logdata.write(info + "\n")
+    else:
+        logdata = open("log.txt", 'w+')
+        logdata.write(info + "\n")
+    logdata.close()
+
 def updater():
-    cversion = '0.9.465.beta'
+    cversion = '0.9.467.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -29,30 +40,41 @@ def updater():
         cversion = str(str(cmode) + "-" + str(cmv) + "." + str(csv) + "." + str(chf))
     else:
         cversion = str(str(cmv) + "." + str(csv) + "." + str(chf))
-    print("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
+    verinfo = str("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
+    print(verinfo)
+    log(verinfo)
     if (mv > cmv) or (sv > csv) or (hf > chf):
         if os.path.isfile("./old_run.py") == True:
             os.remove("old_run.py")
-        else:
-            for filename in os.listdir("."):
-                if filename.startswith("run"):
-                    os.rename(filename, "old_run.py")
-                    print("Updating to latest version...")
-                    time.sleep(1)
-                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
-            time.sleep(1)
-            if platform == 'linux':
-                os.system('python3 run.py')
-                exit()
-            elif platform == 'win32':
-                os.system('run.py')
-                exit()
+            info = "removing old version..."
+            log(info)
+        for filename in os.listdir("."):
+            if filename.startswith("run"):
+                os.rename(filename, "old_run.py")
+                print("Updating to latest version...")
+                info = "Updating to latest version..."
+                log(info)
+                time.sleep(1)
+                urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
+        time.sleep(1)
+        if platform == 'linux':
+            os.system('python3 run.py')
+            exit()
+        elif platform == 'win32':
+            os.system('run.py')
+            exit()
     elif nversion == cversion:
-        print("Currently up to date on version " + str(cversion))
+        info = str("Currently up to date on version " + str(cversion))
+        print(info)
+        log(info)
     elif mode == 'dev':
-        print("Developer Version Detected! Not Updating!")
+        info = str("Developer Version Detected! Not Updating!")
+        print(info)
+        log(info)
     else:
-        print("[Error]: Unrecognized mode")
+        info = "[Error]: Unrecognized mode"
+        print(info)
+        log(info)
     if os.path.isfile('./version.txt') == True:
         os.remove("version.txt")
     time.sleep(2)
@@ -60,19 +82,19 @@ def updater():
 
 def ftsetup():
     if os.path.isfile('./fts.txt') == True:
-        print("fts.txt exists")
+        info = "fts.txt exists"
+        log(info)
     else:
-        print("fts.txt doesn't exist")
+        info = "fts.txt doesn't exist"
+        log(info)
         urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/fts.txt", "fts.txt")
     fts = open('fts.txt', 'r')
     ftscheck = str(fts.read().strip())
     if ftscheck == true:
-        print("is true")
+        info = "Running First Time Setup"
+        print(info)
+        log(info)
         fts.close
-        fts = open('fts.txt', 'w+')
-        fts.write('false')
-        print("changing to false")
-        print("running first time setup")
         if platform == "linux":
             print("running on linux everything should work")
             os.system("sudo pip install simple-crypt")
@@ -105,7 +127,7 @@ def ftsetup():
             pwdb = open(".pwlist.pw", 'w+')
         else:
             pwdb = open(".pwlist.pw", 'w')
-        pwdb.write("[Entries] \n")
+        pwdb.write("// [Entries] \n")
         pwdb.close()
         pwdb = open(".pwlist.pw", 'r')
         pwdbread = pwdb.read()
@@ -121,21 +143,30 @@ def ftsetup():
         vault.write(ciphertext)
         vault.close()
         del pwdb, pwdbread, mpw
+        fts = open('fts.txt', 'w+')
+        fts.write('false')
+        info = "First Time Setup is finished"
+        print(info)
+        log(info)
 
 
     elif ftscheck == false:
-        print("is false")
+        info = "Not first time running..."
+        log(info)
     else:
-        print("wtf?")
+        info = "[Error]: FTS check didn't responde with a recognizable output"
+        log(info)
+        fts = open('fts.txt', 'w+')
+        fts.write('false')
     fts.close
 
 if platform == 'linux':
     try:
-        updater()
         import gi
         from simplecrypt import encrypt, decrypt
         gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk, GObject, Gdk
+        updater()
 
         class DialogExample(Gtk.Window):
             def __init__(self, name, user, psw):
@@ -249,19 +280,30 @@ clip.set_text("", -1)
 
             def load_vault(self, pwfile):
                 account = ''
-                print("Unlocking")
+                info = "Unlocking"
+                print(info)
+                log(info)
                 pwfile2 = str(pwfile)
                 pwfile2 = pwfile.strip()
                 while (account != 'quit') and (account != 'add'):
                     account = input("Search For Account: ")
-                    for line in pwfile2.splitlines():
-                        pw = line.split(",")
-                        name = pw[len(pw)-3]
-                        user = pw[len(pw)-2]
-                        psw = pw[len(pw)-1]
-                        if name == account:
-                            self.show_account(name,user,psw)
+                    if (account != 'quit') and (account != 'add'):
+                        for line in pwfile2.splitlines():
+                            if line.startswith('//'):
+                                info = "Skipping title..."
+                                log(info)
+                            else:
+                                info = "detected proper format"
+                                log(info)
+                                pw = line.split(",")
+                                name = pw[len(pw)-3]
+                                user = pw[len(pw)-2]
+                                psw = pw[len(pw)-1]
+                                if name == account:
+                                    self.show_account(name,user,psw)
                 if account == 'quit':
+                    info = "locking and shutting down"
+                    log(info)
                     self.lock_vault()
                 elif account == 'add':
                     pwlist = open('.tmp.tmp', 'a')
@@ -316,7 +358,9 @@ clip.set_text("", -1)
         os.remove('fts.txt')
         os.system("python3 run.py")
     except  KeyboardInterrupt:
-        print("Shutting Down")
+        info = "Shutting Down..."
+        print(info)
+        log(info)
         exit()
 
 elif platform == 'win32':
