@@ -4,7 +4,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = '0.9.461.beta'
+    cversion = '0.9.462.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -91,7 +91,7 @@ def ftsetup():
             print("[WARNING]: Unsupported Version, use at your own risk!")
         print("In order for your passwords to be stored safely please Enter a master password!")
         global mpw
-        mpw = getpas.getpass("Enter Password: ")
+        mpw = getpass.getpass("Enter Password: ")
         mpwcheck = getpass.getpass("Enter again: ")
         if mpw == mpwcheck:
             print("Passowrds Match!")
