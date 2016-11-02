@@ -44,25 +44,36 @@ def updater():
     print(verinfo)
     log(verinfo)
     if (mv > cmv) or (sv > csv) or (hf > chf):
-        if os.path.isfile("./old_run.py") == True:
-            os.remove("old_run.py")
-            info = "removing old version..."
-            log(info)
-        for filename in os.listdir("."):
-            if filename.startswith("run"):
-                os.rename(filename, "old_run.py")
-                print("Updating to latest version...")
-                info = "Updating to latest version..."
+        print("Update Available!")
+        if os.path.isfile("./changelog.txt") == True:
+            os.remove("changelog.txt")
+        urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/changelog.txt", "changelog.txt")
+        changelogd = open("changelog.txt", 'r')
+        changelog = changelogd.read()
+        print(changelog)
+        update = input("Do you want to update? [Y]es/[N]o : ")
+        if (update == 'Y') or (update == 'y') or (update == 'Yes') or (update == 'yes'):
+            if os.path.isfile("./old_run.py") == True:
+                os.remove("old_run.py")
+                info = "removing old version..."
                 log(info)
-                time.sleep(1)
-                urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
-        time.sleep(1)
-        if platform == 'linux':
-            os.system('python3 run.py')
-            exit()
-        elif platform == 'win32':
-            os.system('run.py')
-            exit()
+            for filename in os.listdir("."):
+                if filename.startswith("run"):
+                    os.rename(filename, "old_run.py")
+                    print("Updating to latest version...")
+                    info = "Updating to latest version..."
+                    log(info)
+                    time.sleep(1)
+                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/run.py", "run.py")
+            time.sleep(1)
+            if platform == 'linux':
+                os.system('python3 run.py')
+                exit()
+            elif platform == 'win32':
+                os.system('run.py')
+                exit()
+        elif (update == 'N') or (update == 'n') or (update == 'No') or (update == 'no'):
+            print("Not Updating")
     elif nversion == cversion:
         info = str("Currently up to date on version " + str(cversion))
         print(info)
@@ -118,7 +129,7 @@ def ftsetup():
         mpw = getpass.getpass("Enter Password: ")
         mpwcheck = getpass.getpass("Enter again: ")
         if mpw == mpwcheck:
-            print("Passowrds Match!")
+            print("Passwords Match!")
         else:
             print("[Error]: passwords do not match!")
         del mpwcheck
