@@ -1,4 +1,4 @@
-Beta-0.9.472:
+Beta-0.9.473 - Hotfix:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
@@ -14,6 +14,8 @@ Windows may work but no garuntees, please contact me about bugs
 - Updated FTS, it now creates a password database file when running for the first time
 
 - Fixed Misspellings in code
+
+- Hotfix: added check to make sure a file exists before it deletes it to increase compatibility
 
 [To-do]:
 - Full gui support on linux
