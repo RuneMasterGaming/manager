@@ -4,7 +4,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = '0.9.464.beta'
+    cversion = '0.9.465.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -43,8 +43,10 @@ def updater():
             time.sleep(1)
             if platform == 'linux':
                 os.system('python3 run.py')
+                exit()
             elif platform == 'win32':
                 os.system('run.py')
+                exit()
     elif nversion == cversion:
         print("Currently up to date on version " + str(cversion))
     elif mode == 'dev':
@@ -379,6 +381,7 @@ elif platform == 'win32':
         windows(pwfile)
 
     try:
+        from simplecrypt import encrypt, decrypt
         updater()
         print("Running on Windows no gui support")
         win_decrypt()
