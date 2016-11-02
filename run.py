@@ -4,7 +4,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = '0.9.463.beta'
+    cversion = '0.9.464.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -101,22 +101,24 @@ def ftsetup():
         if os.path.isfile("./.pwlist.pw") == False:
             print("password database not detected, now creating one")
             pwdb = open(".pwlist.pw", 'w+')
-            pwdb.write("[Entries] \n")
-            pwdb.close()
-            pwdb = open(".pwlist.pw", 'r')
-            pwdbread = pwdb.read()
-            pwdb.close()
-            pwdbread = str(pwdbread)
-            ciphertext = encrypt(mpw, pwdbread.encode('utf8'))
-            ciphertext = hexlify(ciphertext)
-            ciphertext = str(ciphertext)
-            ciphertext = ciphertext.upper()
-            ciphertext = ciphertext.lstrip("B'")
-            ciphertext = ciphertext.rstrip("'")
-            vault = open('.pwlist.pw', 'w+')
-            vault.write(ciphertext)
-            vault.close()
-            del pwdb, pwdbread, mpw
+        else:
+            pwdb = open(".pwlist.pw", 'w')
+        pwdb.write("[Entries] \n")
+        pwdb.close()
+        pwdb = open(".pwlist.pw", 'r')
+        pwdbread = pwdb.read()
+        pwdb.close()
+        pwdbread = str(pwdbread)
+        ciphertext = encrypt(mpw, pwdbread.encode('utf8'))
+        ciphertext = hexlify(ciphertext)
+        ciphertext = str(ciphertext)
+        ciphertext = ciphertext.upper()
+        ciphertext = ciphertext.lstrip("B'")
+        ciphertext = ciphertext.rstrip("'")
+        vault = open('.pwlist.pw', 'w+')
+        vault.write(ciphertext)
+        vault.close()
+        del pwdb, pwdbread, mpw
 
 
     elif ftscheck == false:
