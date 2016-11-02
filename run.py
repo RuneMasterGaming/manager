@@ -4,7 +4,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = '0.9.462.beta'
+    cversion = '0.9.463.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -98,7 +98,7 @@ def ftsetup():
         else:
             print("[Error]: passwords do not match!")
         del mpwcheck
-        if os.path.isfile("./.pwlist.pw") == True:
+        if os.path.isfile("./.pwlist.pw") == False:
             print("password database not detected, now creating one")
             pwdb = open(".pwlist.pw", 'w+')
             pwdb.write("[Entries] \n")
