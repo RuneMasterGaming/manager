@@ -4,7 +4,7 @@ from sys import platform
 true = 'true'
 false = 'false'
 def updater():
-    cversion = '0.9.46.beta'
+    cversion = '0.9.461.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -13,6 +13,7 @@ def updater():
     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
     nversiondata = open('version.txt', 'r')
     nversionreadun = nversiondata.read()
+    nversiondata.close()
     nversionread = str(nversionreadun).strip()
     nversion = str(nversionread).split(".")
     mv = int(nversion[len(nversion)-4])
