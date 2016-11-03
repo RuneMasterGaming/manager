@@ -1,4 +1,4 @@
-Beta-0.9.476:
+Beta-0.9.477 - Hotfix:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
@@ -9,6 +9,8 @@ Windows may work but no garuntees, please contact me about bugs
 -Added support for older versions to update
 
 -More compatiblity
+
+-Fixed bug when updating
 
 [To-do]:
 - Full gui support on linux
