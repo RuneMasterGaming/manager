@@ -18,7 +18,7 @@ def log(info):
     logdata.close()
 
 def updater():
-    cversion = '0.9.478.beta'
+    cversion = '0.9.477.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -47,7 +47,7 @@ def updater():
     print(verinfo)
     log(verinfo)
     if (mv > cmv) or (sv > csv) or (hf > chf):
-        update = 0
+        updatedata = 0
         print("Update Available!")
         if os.path.isfile("./changelog.txt") == True:
             os.remove("changelog.txt")
@@ -58,14 +58,13 @@ def updater():
         update = input("Do you want to update? [Y]es/[N]o : ")
         if (update == 'Y') or (update == 'y') or (update == 'Yes') or (update == 'yes'):
             for filename in os.listdir("."):
-                if update == 0:
-                    if filename == "manager.py":
-                        print("Updating to latest version...")
-                        info = "Updating to latest version..."
-                        log(info)
-                        time.sleep(1)
-                        urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
-                        update = 1
+                if (filename == "manager.py") and (updatedata == 0):
+                    print("Updating to latest version...")
+                    info = "Updating to latest version..."
+                    log(info)
+                    time.sleep(1)
+                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
+                    updatedata = 1
             time.sleep(1)
             if platform == 'linux':
                 os.system('python3 manager.py')
