@@ -39,4 +39,5 @@ sit back, relax and press enter when asked.""")
             os.system("python3 manager.py")
         else:
             print("Update Failed...")
-        
+
+updater()
