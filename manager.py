@@ -61,6 +61,7 @@ def updater():
                 if (filename == "manager.py") and (updatedata == 0):
                     print("Updating to latest version...")
                     info = "Updating to latest version..."
+                    os.rename(filename, "manager-" + cversion + ".py")
                     log(info)
                     time.sleep(1)
                     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
