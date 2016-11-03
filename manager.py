@@ -24,7 +24,7 @@ def updater():
     csv = int(cversion[len(cversion)-3])
     chf = int(cversion[len(cversion)-2])
     cmode = str(cversion[len(cversion)-1])
-    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
+    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/nversion.txt", "version.txt")
     nversiondata = open('version.txt', 'r')
     nversionreadun = nversiondata.read()
     nversiondata.close()
