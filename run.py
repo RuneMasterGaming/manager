@@ -16,7 +16,7 @@ sit back, relax and press enter when asked.""")
     print(changelog)
     cont = input("Press enter to continue")
     if cont != 'quit':
-        urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/version.txt", "version.txt")
+        urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/nversion.txt", "version.txt")
         nversiondata = open('version.txt', 'r')
         nversionreadun = nversiondata.read()
         nversiondata.close()
