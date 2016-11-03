@@ -36,6 +36,7 @@ sit back, relax and press enter when asked.""")
         urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
         if os.path.isfile("./manager.py"):
             print("Update complete now launching...")
+            time.sleep(1)
             os.system("python3 manager.py")
         else:
             print("Update Failed...")
