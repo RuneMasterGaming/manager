@@ -58,15 +58,14 @@ def updater():
         update = input("Do you want to update? [Y]es/[N]o : ")
         if (update == 'Y') or (update == 'y') or (update == 'Yes') or (update == 'yes'):
             for filename in os.listdir("."):
-                if filename == "manager.py":
-                    if update == 0:
-                        os.rename(filename, "manager-" + cversion + ".py")
+                if update == 0:
+                    if filename == "manager.py":
+                        print("Updating to latest version...")
+                        info = "Updating to latest version..."
+                        log(info)
+                        time.sleep(1)
+                        urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
                         update = 1
-                    print("Updating to latest version...")
-                    info = "Updating to latest version..."
-                    log(info)
-                    time.sleep(1)
-                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
             time.sleep(1)
             if platform == 'linux':
                 os.system('python3 manager.py')
