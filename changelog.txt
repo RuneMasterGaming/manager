@@ -1,4 +1,4 @@
-Beta-0.9.473 - Hotfix:
+Beta-0.9.476:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
@@ -6,16 +6,9 @@ Currently only fully supported on linux
 Windows may work but no garuntees, please contact me about bugs
 
 
-- Added Changelog system, you can see what's new before you update!
-- Added optional updating, now you can choose weither or not to update!
-- Added Logging system, Now the manager logs info to a log.txt file
+-Added support for older versions to update
 
-- Updated the Updater(Again), now you don't have to run the program twice for it to update!
-- Updated FTS, it now creates a password database file when running for the first time
-
-- Fixed Misspellings in code
-
-- Hotfix: added check to make sure a file exists before it deletes it to increase compatibility
+-More compatiblity
 
 [To-do]:
 - Full gui support on linux
