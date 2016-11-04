@@ -62,7 +62,7 @@ def updater():
                     print("Updating to latest version...")
                     info = "Updating to latest version..."
                     archive = str("manager-" + cversion + '.zip')
-                    backup = zipfile(archive, 'w'):
+                    backup = zipfile(archive, 'w')
                     backup.write('manager.py')
                     backup.close
                     if os.path.isfile("./manager.py") == True:
