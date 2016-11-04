@@ -18,7 +18,7 @@ def log(info):
     logdata.close()
 
 def updater():
-    cversion = '0.9.478.beta'
+    cversion = '0.9.501.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -61,7 +61,11 @@ def updater():
                 if (filename == "manager.py") and (updatedata == 0):
                     print("Updating to latest version...")
                     info = "Updating to latest version..."
-                    os.rename(filename, "manager-" + cversion + ".py")
+                    archive = str("manager-" + cversion)
+                    with ZipFile(archive, 'w') as backup:
+                        backup.write('manager.py')
+                    if os.path.isfile("./manager.py") == True:
+                        os.remove("manager.py")
                     log(info)
                     time.sleep(1)
                     urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
