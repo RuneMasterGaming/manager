@@ -61,8 +61,7 @@ def updater():
                 if (filename == "manager.py") and (updatedata == 0):
                     print("Updating to latest version...")
                     info = "Updating to latest version..."
-                    archive = str("manager-" + cversion + '.zip')
-                    with zipfile(archive, 'w') as backup:
+                    with zipfile("manager-" + cversion + '.zip', 'w') as backup:
                         backup.write('manager.py')
                     if os.path.isfile("./manager.py") == True:
                         os.remove("manager.py")
