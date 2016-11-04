@@ -18,7 +18,7 @@ def log(info):
     logdata.close()
 
 def updater():
-    cversion = '0.9.501.beta'
+    cversion = '0.9.477.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -62,7 +62,7 @@ def updater():
                     print("Updating to latest version...")
                     info = "Updating to latest version..."
                     archive = str("manager-" + cversion + '.zip')
-                    backup = zipfile(archive, 'w')
+                    backup = zipfile.ZipFile(archive, 'w')
                     backup.write('manager.py')
                     backup.close
                     if os.path.isfile("./manager.py") == True:
