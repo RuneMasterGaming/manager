@@ -1,13 +1,13 @@
-Beta-0.9.501:
+Beta-0.9.532:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
 Currently only fully supported on linux
 Windows may work but no garuntees, please contact me about bugs
 
-- Updater now archives previous versions
+- Added more GUI Goodness
 
 [To-do]:
-- Full gui support on linux
+- Full gui support on linux 80%
 - Working semi gui port for windows
-- Reoptimize code to make it more secure
+- Reoptimize code to make it more secure 50%
