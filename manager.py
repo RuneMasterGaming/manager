@@ -18,7 +18,7 @@ def log(info):
     logdata.close()
 
 def updater():
-    cversion = '0.9.501.beta'
+    cversion = '0.9.532.dev'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -182,7 +182,252 @@ try:
     from simplecrypt import encrypt, decrypt
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk, GObject, Gdk
-    updater()
+    #updater()
+
+    class UpdateChecker(Gtk.Window):
+        def __init__(self):
+            Gtk.Window.__init__(self, title="Updater")
+            self.set_size_request(600,500)
+            self.timeout_id = None
+            if os.path.isfile("./changelog.txt") == True:
+                os.remove("changelog.txt")
+                urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/changelog.txt", "changelog.txt")
+                changelogd = open("changelog.txt", 'r')
+                changelog = changelogd.read()
+
+            label = Gtk.Label()
+            label.set_text(changelog)
+
+            global prog_bar
+            prog_bar = Gtk.ProgressBar()
+
+            butupdate = Gtk.Button(label="Update")
+            butupdate.connect("clicked", self.start_update)
+
+            butcancel = Gtk.Button(label="Cancel")
+            butcancel.connect("clicked", self.dont_update)
+
+            grid = Gtk.Grid()
+            grid.set_column_spacing(5)
+            grid.set_column_homogeneous(True)
+            grid.set_row_homogeneous(False)
+            grid.attach(label, 0, 0, 2, 2)
+            grid.attach(prog_bar, 0, 3, 2, 3)
+            grid.attach(butupdate, 0, 20, 1, 20)
+            grid.attach_next_to(butcancel, butupdate, Gtk.PositionType.RIGHT, 1, 1)
+            self.add(grid)
+
+        def start_update(self, button):
+            print("Update clicked!")
+            prog_bar.set_fraction(0.1)
+            updatedata = 0
+            print("Update Available!")
+            prog_bar.set_fraction(0.2)
+            if os.path.isfile("./changelog.txt") == True:
+                os.remove("changelog.txt")
+            prog_bar.set_fraction(0.4)
+            urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/changelog.txt", "changelog.txt")
+            prog_bar.set_fraction(0.6)
+            changelogd = open("changelog.txt", 'r')
+            changelog = changelogd.read()
+            print(changelog)
+            for filename in os.listdir("."):
+                if (filename == "manager.py") and (updatedata == 0):
+                    prog_bar.set_fraction(0.7)
+                    print("Updating to latest version...")
+                    info = "Updating to latest version..."
+                    archive = str("manager-" + cversion + '.zip')
+                    backup = zipfile.ZipFile(archive, 'w')
+                    backup.write('manager.py')
+                    backup.close
+                    if os.path.isfile("./manager.py") == True:
+                        os.remove("manager.py")
+                    log(info)
+                    time.sleep(1)
+                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
+                    prog_bar.set_fraction(0.9)
+                    updatedata = 1
+                time.sleep(1)
+            if platform == 'linux':
+                prog_bar.set_fraction(1.0)
+                os.system('python3 manager.py')
+                exit()
+            elif platform == 'win32':
+                os.system('manager.py')
+                exit()
+            prog_bar.set_fraction(1.0)
+            if os.path.isfile('./version.txt') == True:
+                os.remove("version.txt")
+            win.close()
+            global main
+            main = EntryWindow()
+            main.connect("delete-event", Gtk.main_quit)
+            main.show_all()
+            Gtk.main()
+
+
+        def dont_update(self, button):
+            print("Cancel clicked")
+
+        def progress_bar(self):
+            print("no")
+
+    class AddAccount(Gtk.Window):
+        def __init__(self, mpw, pwf):
+            Gtk.Window.__init__(self, title="Add Account")
+            self.set_default_size(400,200)
+            self.timeout_id = None
+
+            global enentry
+            enentry = Gtk.Entry()
+            enentry.set_placeholder_text("Website")
+
+            global euentry
+            euentry = Gtk.Entry()
+            euentry.set_placeholder_text("Username")
+
+            global epentry
+            epentry = Gtk.Entry()
+            epentry.set_placeholder_text("Password")
+            epentry.set_visibility(False)
+
+            global epentrycheck
+            epentrycheck = Gtk.Entry()
+            epentrycheck.set_placeholder_text("Password Again")
+            epentrycheck.set_visibility(False)
+
+            stbutton = Gtk.Button(label="Add")
+            stbutton.connect("clicked", self.main)
+
+            grid = Gtk.Grid()
+            grid.set_column_spacing(5)
+            grid.set_row_spacing(5)
+            grid.set_column_homogeneous(True)
+            grid.set_row_homogeneous(True)
+            grid.attach(enentry, 0, 0, 1, 1)
+            grid.attach_next_to(euentry, enentry, Gtk.PositionType.BOTTOM,1 ,1)
+            grid.attach_next_to(epentry, euentry, Gtk.PositionType.BOTTOM,1 ,1)
+            grid.attach_next_to(epentrycheck, epentry, Gtk.PositionType.BOTTOM,1 ,1)
+            grid.attach_next_to(stbutton, epentrycheck, Gtk.PositionType.BOTTOM,1 ,1)
+            self.add(grid)
+
+
+        def main(self, button):
+            pwlist = open('.tmp.tmp', 'w+')
+            pwlist.write(pwf)
+            pwlist.close()
+            pwlist = open('.tmp.tmp', 'a')
+            nentry = enentry.get_text()
+            uentry = euentry.get_text()
+            pentry = epentry.get_text()
+            pentrycheck = epentrycheck.get_text()
+            if pentry != pentrycheck:
+                print("Passwords don't match")
+            entry = str(nentry + "," + uentry + "," + pentry)
+            pwlist.write(entry + '\n')
+            pwlist.close
+            pwlist = open('.tmp.tmp', 'r')
+            pwlistdata = pwlist.read()
+            pwliststr = str(pwlistdata)
+            print(pwliststr)
+            pwlist.close
+            if os.path.isfile("./.tmp.tmp") == True:
+                os.remove(".tmp.tmp")
+            ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
+            ciphertext = hexlify(ciphertext)
+            ciphertext = str(ciphertext)
+            ciphertext = ciphertext.upper()
+            ciphertext = ciphertext.lstrip("B'")
+            ciphertext = ciphertext.rstrip("'")
+            vault = open('.pwlist.pw', 'w+')
+            vault.write(ciphertext)
+            global pwfile
+            pwfile = pwliststr
+            loadvault.close()
+            add.close()
+            global loadvault
+            loadvault = PassVault(pwfile, mpw)
+            loadvault.connect("delete-event", Gtk.main_quit)
+            loadvault.show_all()
+            Gtk.main()
+
+
+    class PassVault(Gtk.Window):
+        def __init__(self, mpw, pwfile):
+            global pwf
+            pwf = pwfile
+            Gtk.Window.__init__(self, title="Vault")
+            self.set_default_size(400, 200)
+            self.timeout_id = None
+
+            global search
+            search = Gtk.Entry()
+            search.set_placeholder_text("Search for Account")
+
+            searchbutton = Gtk.Button(label="Search")
+            searchbutton.connect("clicked", self.start_search)
+
+            addbutton = Gtk.Button(label="Add account")
+            addbutton.connect("clicked", self.add_account)
+
+
+            grid = Gtk.Grid()
+            grid.set_column_spacing(5)
+            grid.set_column_homogeneous(True)
+            grid.set_row_homogeneous(False)
+            grid.attach(search, 0, 0, 2, 1)
+            grid.attach(searchbutton, 0, 1, 1, 1)
+            grid.attach_next_to(addbutton, searchbutton, Gtk.PositionType.RIGHT, 1, 1)
+            self.add(grid)
+
+
+        def start_search(self, button):
+            account = search.get_text()
+            self.load_vault(account)
+
+        def add_account(self, button):
+            global add
+            add = AddAccount(mpw, pwf)
+            add.connect("delete-event", Gtk.main_quit)
+            add.show_all()
+            Gtk.main()
+
+        def show_account(self, name, user, psw):
+            dialog = DialogExample(name, user, psw)
+            dialog.connect("delete-event", Gtk.main_quit)
+            dialog.show_all()
+            Gtk.main()
+
+        def lock_vault(self):
+            print("Locking")
+            exit()
+
+        def load_vault(self, account):
+            info = "Unlocking"
+            log(info)
+            pwfile2 = str(pwfile)
+            pwfile2 = pwfile2.strip()
+            print(pwfile2)
+            if (account != 'quit') and (account != 'add'):
+                for line in pwfile2.splitlines():
+                    if line.startswith('//'):
+                        info = "Skipping title..."
+                        log(info)
+                    else:
+                        info = "detected proper format"
+                        log(info)
+                        pw = line.split(",")
+                        name = pw[len(pw)-3]
+                        user = pw[len(pw)-2]
+                        psw = pw[len(pw)-1]
+                        if name == account:
+                            self.show_account(name,user,psw)
+            elif account == 'quit':
+                info = "locking and shutting down"
+                log(info)
+                self.lock_vault()
+
+
 
     class DialogExample(Gtk.Window):
         def __init__(self, name, user, psw):
@@ -282,75 +527,26 @@ clip.set_text("", -1)
         def button_clicked(self, button):
             global mpw
             mpw = entry.get_text()
-            self.decrypt_vault(mpw)
+            self.decrypt_vault()
 
-        def decrypt_vault(self, mpw):
+        def decrypt_vault(self):
             vault = open('.pwlist.pw','r')
             vaultdata = vault.read()
             vaulthex = unhexlify(vaultdata)
             vaultdec = decrypt(mpw, vaulthex)
             vaultutf = vaultdec.decode('utf8')
+            global pwfile
             pwfile = str(vaultutf)
-            pwlist = open('.tmp.tmp', 'w+')
+            main.close()
+            print("Closing Main Windows")
             self.load_vault(pwfile)
 
         def load_vault(self, pwfile):
-            account = ''
-            info = "Unlocking"
-            print(info)
-            log(info)
-            pwfile2 = str(pwfile)
-            pwfile2 = pwfile.strip()
-            while (account != 'quit') and (account != 'add'):
-                account = input("Search For Account: ")
-                if (account != 'quit') and (account != 'add'):
-                    for line in pwfile2.splitlines():
-                        if line.startswith('//'):
-                            info = "Skipping title..."
-                            log(info)
-                        else:
-                            info = "detected proper format"
-                            log(info)
-                            pw = line.split(",")
-                            name = pw[len(pw)-3]
-                            user = pw[len(pw)-2]
-                            psw = pw[len(pw)-1]
-                            if name == account:
-                                self.show_account(name,user,psw)
-            if account == 'quit':
-                info = "locking and shutting down"
-                log(info)
-                self.lock_vault()
-            elif account == 'add':
-                pwlist = open('.tmp.tmp', 'a')
-                nentry = input("Enter Website: ")
-                uentry = input("Enter Username: ")
-                pentry = getpass.getpass("Enter Password: ")
-                pentrycheck = getpass.getpass("Enter Password Again: ")
-                while pentry != pentrycheck:
-                    print("Passwords don't match! Try again")
-                    pentry = getpass.getpass("Enter Password: ")
-                    pentrycheck = getpass.getpass("Enter Password Again: ")
-                entry = str(nentry + "," + uentry + "," + pentry)
-                pwlist.write(pwfile)
-                pwlist.write(entry + '\n')
-                pwlist.close
-                pwlist = open('.tmp.tmp', 'r')
-                pwlistdata = pwlist.read()
-                pwliststr = str(pwlistdata)
-                pwlist.close
-                if os.path.isfile("./.tmp.tmp") == True:
-                    os.remove(".tmp.tmp")
-                ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
-                ciphertext = hexlify(ciphertext)
-                ciphertext = str(ciphertext)
-                ciphertext = ciphertext.upper()
-                ciphertext = ciphertext.lstrip("B'")
-                ciphertext = ciphertext.rstrip("'")
-                vault = open('.pwlist.pw', 'w+')
-                vault.write(ciphertext)
-                pwfile = pwliststr
-                self.load_vault(pwfile)
+            global loadvault
+            loadvault = PassVault(mpw, pwfile)
+            loadvault.connect("delete-event", Gtk.main_quit)
+            loadvault.show_all()
+            Gtk.main()
 
 
         def lock_vault(self):
@@ -359,17 +555,47 @@ clip.set_text("", -1)
                 os.remove('.tmp.tmp')
             exit()
 
-        def show_account(self, name, user, psw):
-            dialog = DialogExample(name, user, psw)
-            dialog.connect("delete-event", Gtk.main_quit)
-            dialog.show_all()
-            Gtk.main()
 
+    cversion = '0.9.532.dev'
+    cversion = str(cversion).split(".")
+    cmv = int(cversion[len(cversion)-4])
+    csv = int(cversion[len(cversion)-3])
+    chf = int(cversion[len(cversion)-2])
+    cmode = str(cversion[len(cversion)-1])
+    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/nversion.txt", "version.txt")
+    nversiondata = open('version.txt', 'r')
+    nversionreadun = nversiondata.read()
+    nversiondata.close()
+    nversionread = str(nversionreadun).strip()
+    nversion = str(nversionread).split(".")
+    mv = int(nversion[len(nversion)-4])
+    sv = int(nversion[len(nversion)-3])
+    hf = int(nversion[len(nversion)-2])
+    mode = str(nversion[len(nversion)-1])
+    if (mode == 'pre') or (mode == 'beta') or (mode == 'dev'):
+        nversion = str(str(mode) + "-" + str(mv) + "." + str(sv) + "." + str(hf))
+    else:
+        nversion = str(str(mv) + "." + str(sv) + "." + str(hf))
 
-    win = EntryWindow()
-    win.connect("delete-event", Gtk.main_quit)
-    win.show_all()
-    Gtk.main()
+    if (cmode == 'pre') or (cmode == 'beta') or (cmode == 'dev'):
+        cversion = str(str(cmode) + "-" + str(cmv) + "." + str(csv) + "." + str(chf))
+    else:
+        cversion = str(str(cmv) + "." + str(csv) + "." + str(chf))
+    verinfo = str("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
+    print(verinfo)
+    log(verinfo)
+    if (mv > cmv) or (sv > csv) or (hf > chf):
+        win = UpdateChecker()
+        win.connect("delete-event", Gtk.main_quit)
+        win.show_all()
+        Gtk.main()
+    else:
+        print("No update found")
+        main = EntryWindow()
+        main.connect("delete-event", Gtk.main_quit)
+        main.show_all()
+        Gtk.main()
+
 except ImportError:
     if os.path.isfile("./fts.txt") == True:
         os.remove('fts.txt')
