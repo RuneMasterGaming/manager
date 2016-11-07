@@ -18,7 +18,7 @@ def log(info):
     logdata.close()
 
 def updater():
-    cversion = '0.9.532.dev'
+    cversion = '0.9.532.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
