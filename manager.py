@@ -7,9 +7,12 @@ triffle = socket.gethostname()
 if triffle == 'getcoffeebeforestarting':
     print("Triffle if you encounter a bug please screenshot the error from the terminal and send it to me.")
 
+global cversion
+cversion = '0.9.605.beta'
+
 def log(info):
     info = str(info)
-    if os.path.isfile('./log.txt') == True:
+    if os.path.isfile('./log.txt'):
         logdata = open("log.txt", 'a')
         logdata.write(info + "\n")
     else:
@@ -17,88 +20,9 @@ def log(info):
         logdata.write(info + "\n")
     logdata.close()
 
-def updater():
-    cversion = '0.9.501.beta'
-    cversion = str(cversion).split(".")
-    cmv = int(cversion[len(cversion)-4])
-    csv = int(cversion[len(cversion)-3])
-    chf = int(cversion[len(cversion)-2])
-    cmode = str(cversion[len(cversion)-1])
-    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/nversion.txt", "version.txt")
-    nversiondata = open('version.txt', 'r')
-    nversionreadun = nversiondata.read()
-    nversiondata.close()
-    nversionread = str(nversionreadun).strip()
-    nversion = str(nversionread).split(".")
-    mv = int(nversion[len(nversion)-4])
-    sv = int(nversion[len(nversion)-3])
-    hf = int(nversion[len(nversion)-2])
-    mode = str(nversion[len(nversion)-1])
-    if (mode == 'pre') or (mode == 'beta') or (mode == 'dev'):
-        nversion = str(str(mode) + "-" + str(mv) + "." + str(sv) + "." + str(hf))
-    else:
-        nversion = str(str(mv) + "." + str(sv) + "." + str(hf))
-
-    if (cmode == 'pre') or (cmode == 'beta') or (cmode == 'dev'):
-        cversion = str(str(cmode) + "-" + str(cmv) + "." + str(csv) + "." + str(chf))
-    else:
-        cversion = str(str(cmv) + "." + str(csv) + "." + str(chf))
-    verinfo = str("Latest Version: " + str(nversion) + " Current Version: " + str(cversion))
-    print(verinfo)
-    log(verinfo)
-    if (mv > cmv) or (sv > csv) or (hf > chf):
-        updatedata = 0
-        print("Update Available!")
-        if os.path.isfile("./changelog.txt") == True:
-            os.remove("changelog.txt")
-        urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/changelog.txt", "changelog.txt")
-        changelogd = open("changelog.txt", 'r')
-        changelog = changelogd.read()
-        print(changelog)
-        update = input("Do you want to update? [Y]es/[N]o : ")
-        if (update == 'Y') or (update == 'y') or (update == 'Yes') or (update == 'yes'):
-            for filename in os.listdir("."):
-                if (filename == "manager.py") and (updatedata == 0):
-                    print("Updating to latest version...")
-                    info = "Updating to latest version..."
-                    archive = str("manager-" + cversion + '.zip')
-                    backup = zipfile.ZipFile(archive, 'w')
-                    backup.write('manager.py')
-                    backup.close
-                    if os.path.isfile("./manager.py") == True:
-                        os.remove("manager.py")
-                    log(info)
-                    time.sleep(1)
-                    urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/manager.py", "manager.py")
-                    updatedata = 1
-            time.sleep(1)
-            if platform == 'linux':
-                os.system('python3 manager.py')
-                exit()
-            elif platform == 'win32':
-                os.system('manager.py')
-                exit()
-        elif (update == 'N') or (update == 'n') or (update == 'No') or (update == 'no'):
-            print("Not Updating")
-    elif nversion == cversion:
-        info = str("Currently up to date on version " + str(cversion))
-        print(info)
-        log(info)
-    elif mode == 'dev':
-        info = str("Developer Version Detected! Not Updating!")
-        print(info)
-        log(info)
-    else:
-        info = "[Error]: Unrecognized mode"
-        print(info)
-        log(info)
-    if os.path.isfile('./version.txt') == True:
-        os.remove("version.txt")
-    time.sleep(2)
-    ftsetup()
 
 def ftsetup():
-    if os.path.isfile('./fts.txt') == True:
+    if os.path.isfile('./fts.txt'):
         info = "fts.txt exists"
         log(info)
     else:
@@ -111,7 +35,7 @@ def ftsetup():
         info = "Running First Time Setup"
         print(info)
         log(info)
-        fts.close
+        fts.close()
         if platform == "linux":
             print("running on linux everything should work")
             os.system("sudo pip install simple-crypt")
@@ -130,36 +54,6 @@ def ftsetup():
             m.getch()
         elif platform == "darwin":
             print("[WARNING]: Unsupported Version, use at your own risk!")
-        print("In order for your passwords to be stored safely please Enter a master password!")
-        global mpw
-        mpw = getpass.getpass("Enter Password: ")
-        mpwcheck = getpass.getpass("Enter again: ")
-        if mpw == mpwcheck:
-            print("Passwords Match!")
-        else:
-            print("[Error]: passwords do not match!")
-        del mpwcheck
-        if os.path.isfile("./.pwlist.pw") == False:
-            print("password database not detected, now creating one")
-            pwdb = open(".pwlist.pw", 'w+')
-        else:
-            pwdb = open(".pwlist.pw", 'w')
-        pwdb.write("// [Entries] \n")
-        pwdb.close()
-        pwdb = open(".pwlist.pw", 'r')
-        pwdbread = pwdb.read()
-        pwdb.close()
-        pwdbread = str(pwdbread)
-        ciphertext = encrypt(mpw, pwdbread.encode('utf8'))
-        ciphertext = hexlify(ciphertext)
-        ciphertext = str(ciphertext)
-        ciphertext = ciphertext.upper()
-        ciphertext = ciphertext.lstrip("B'")
-        ciphertext = ciphertext.rstrip("'")
-        vault = open('.pwlist.pw', 'w+')
-        vault.write(ciphertext)
-        vault.close()
-        del pwdb, pwdbread, mpw
         fts = open('fts.txt', 'w+')
         fts.write('false')
         info = "First Time Setup is finished"
@@ -175,21 +69,98 @@ def ftsetup():
         log(info)
         fts = open('fts.txt', 'w+')
         fts.write('false')
-    fts.close
+    fts.close()
 
 try:
     import gi
     from simplecrypt import encrypt, decrypt
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk, GObject, Gdk
-    #updater()
+    ftsetup()
+
+
+
+    class CreateDatabase(Gtk.Window):
+        def __init__(self):
+            Gtk.Window.__init__(self, title="Create Database")
+            self.set_size_request(300,200)
+            self.timeout_id = None
+            global mpentry
+            mpentry = Gtk.Entry()
+            mpentry.set_placeholder_text("Enter Master Password")
+            mpentry.set_visibility(False)
+
+            global mpcentry
+            mpcentry = Gtk.Entry()
+            mpcentry.set_placeholder_text("Enter again")
+            mpcentry.set_visibility(False)
+
+            global pwstatus
+            pwstatus = Gtk.Statusbar()
+            global pwmsg
+            pwmsg = pwstatus.get_context_id("Waiting...")
+
+            crtbutton = Gtk.Button(label="Create Database")
+            crtbutton.connect("clicked", self.create)
+
+            grid = Gtk.Grid()
+            grid.set_column_spacing(5)
+            grid.set_column_homogeneous(True)
+            grid.set_row_homogeneous(True)
+            grid.attach(mpentry, 0, 0, 2, 1)
+            grid.attach_next_to(mpcentry, mpentry, Gtk.PositionType.BOTTOM, 2, 1)
+            grid.attach_next_to(pwstatus, mpcentry, Gtk.PositionType.BOTTOM, 2, 1)
+            grid.attach_next_to(crtbutton, pwstatus, Gtk.PositionType.BOTTOM, 2, 1)
+            self.add(grid)
+
+        def create(self, button):
+            mpw = mpentry.get_text()
+            mpwcheck = mpcentry.get_text()
+            if mpw == mpwcheck:
+                log("Passwords match creating database")
+                pwstatus.push(pwmsg, "Passwords Match!")
+                if mpw == mpwcheck:
+                    print("Passwords Match!")
+                else:
+                    print("[Error]: passwords do not match!")
+                del mpwcheck
+                if os.path.isfile("./.pwlist.pw") == False:
+                    print("password database not detected, now creating one")
+                    pwdb = open(".pwlist.pw", 'w+')
+                else:
+                    pwdb = open(".pwlist.pw", 'w')
+                pwdb.write("// [Entries] \n")
+                pwdb.close()
+                pwdb = open(".pwlist.pw", 'r')
+                pwdbread = pwdb.read()
+                pwdb.close()
+                pwdbread = str(pwdbread)
+                ciphertext = encrypt(mpw, pwdbread.encode('utf8'))
+                ciphertext = hexlify(ciphertext)
+                ciphertext = str(ciphertext)
+                ciphertext = ciphertext.upper()
+                ciphertext = ciphertext.lstrip("B'")
+                ciphertext = ciphertext.rstrip("'")
+                vault = open('.pwlist.pw', 'w+')
+                vault.write(ciphertext)
+                vault.close()
+                del pwdb, pwdbread, mpw
+                createvault.close()
+                main = EntryWindow()
+                main.connect("delete-event", Gtk.main_quit)
+                main.show_all()
+                Gtk.main()
+            else:
+                log("No match")
+                pwstatus.push(pwmsg, "Passwords Don't Match!")
+
 
     class UpdateChecker(Gtk.Window):
         def __init__(self):
             Gtk.Window.__init__(self, title="Updater")
             self.set_size_request(600,500)
             self.timeout_id = None
-            if os.path.isfile("./changelog.txt") == True:
+            if os.path.isfile("./changelog.txt"):
                 os.remove("changelog.txt")
                 urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/changelog.txt", "changelog.txt")
                 changelogd = open("changelog.txt", 'r')
@@ -223,7 +194,7 @@ try:
             updatedata = 0
             print("Update Available!")
             prog_bar.set_fraction(0.2)
-            if os.path.isfile("./changelog.txt") == True:
+            if os.path.isfile("./changelog.txt"):
                 os.remove("changelog.txt")
             prog_bar.set_fraction(0.4)
             urllib.request.urlretrieve("https://raw.githubusercontent.com/RuneMasterGaming/manager/master/changelog.txt", "changelog.txt")
@@ -239,8 +210,8 @@ try:
                     archive = str("manager-" + cversion + '.zip')
                     backup = zipfile.ZipFile(archive, 'w')
                     backup.write('manager.py')
-                    backup.close
-                    if os.path.isfile("./manager.py") == True:
+                    backup.close()
+                    if os.path.isfile("./manager.py"):
                         os.remove("manager.py")
                     log(info)
                     time.sleep(1)
@@ -256,7 +227,7 @@ try:
                 os.system('manager.py')
                 exit()
             prog_bar.set_fraction(1.0)
-            if os.path.isfile('./version.txt') == True:
+            if os.path.isfile('./version.txt'):
                 os.remove("version.txt")
             win.close()
             global main
@@ -325,13 +296,13 @@ try:
                 print("Passwords don't match")
             entry = str(nentry + "," + uentry + "," + pentry)
             pwlist.write(entry + '\n')
-            pwlist.close
+            pwlist.close()
             pwlist = open('.tmp.tmp', 'r')
             pwlistdata = pwlist.read()
             pwliststr = str(pwlistdata)
             print(pwliststr)
-            pwlist.close
-            if os.path.isfile("./.tmp.tmp") == True:
+            pwlist.close()
+            if os.path.isfile("./.tmp.tmp"):
                 os.remove(".tmp.tmp")
             ciphertext = encrypt(mpw, pwliststr.encode('utf8'))
             ciphertext = hexlify(ciphertext)
@@ -487,7 +458,7 @@ atom = Gdk.atom_intern('CLIPBOARD', True)
 clip = entry.get_clipboard(atom)
 clip.set_text("", -1)
 """)
-            kill.close
+            kill.close()
             os.system("nohup python3 .kill.py &")
             print("Clipboard will be cleared after 20 seconds")
 
@@ -495,6 +466,7 @@ clip.set_text("", -1)
     class EntryWindow(Gtk.Window):
 
         def __init__(self):
+            ftsetup()
             Gtk.Window.__init__(self, title="SG Password Manager v0.9")
             self.set_size_request(400, 400)
 
@@ -551,12 +523,11 @@ clip.set_text("", -1)
 
         def lock_vault(self):
             print("Locking")
-            if os.path.isfile("./.tmp.tmp") == True:
+            if os.path.isfile("./.tmp.tmp"):
                 os.remove('.tmp.tmp')
             exit()
 
 
-    cversion = '0.9.532.beta'
     cversion = str(cversion).split(".")
     cmv = int(cversion[len(cversion)-4])
     csv = int(cversion[len(cversion)-3])
@@ -591,13 +562,22 @@ clip.set_text("", -1)
         Gtk.main()
     else:
         print("No update found")
-        main = EntryWindow()
-        main.connect("delete-event", Gtk.main_quit)
-        main.show_all()
-        Gtk.main()
+        if os.path.isfile("./.pwlist.pw"):
+            log("Database file detected")
+            main = EntryWindow()
+            main.connect("delete-event", Gtk.main_quit)
+            main.show_all()
+            Gtk.main()
+        else:
+            log("Database file not detected running database setup")
+            global createvault
+            createvault = CreateDatabase()
+            createvault.connect("delete-event", Gtk.main_quit)
+            createvault.show_all()
+            Gtk.main()
 
 except ImportError:
-    if os.path.isfile("./fts.txt") == True:
+    if os.path.isfile("./fts.txt"):
         os.remove('fts.txt')
     os.system("python3 run.py")
 except  KeyboardInterrupt:
