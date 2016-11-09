@@ -8,14 +8,14 @@ if triffle == 'getcoffeebeforestarting':
     print("Triffle if you encounter a bug please screenshot the error from the terminal and send it to me.")
 
 global cversion
-cversion = '0.9.623.beta'
+cversion = '0.9.625.beta'
 
 def log(info):
     day = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
     ctime = datetime.datetime.strftime(datetime.datetime.now(), '%H:%M:%S')
     info = str(info)
-    logdata = open("log_" + day + "_.txt", 'w+')
-    logdata.write(ctime + ":" + info + "\n")
+    logdata = open("log-" + day + ".txt", 'w+')
+    logdata.write(ctime + " : " + info + "\n")
     logdata.close()
 
 
