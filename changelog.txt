@@ -1,10 +1,11 @@
-Beta-0.9.605:
+Beta-0.9.612:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
 Currently only fully supported on linux
 Windows may work but no garuntees, please contact me about bugs
 
+- Added better logging system
 - Added Database creation helper
 
 - Fixed bugs
