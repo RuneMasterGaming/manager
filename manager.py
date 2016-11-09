@@ -13,8 +13,8 @@ cversion = '0.9.612.beta'
 def log(info):
     day = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     info = str(info)
-        logdata = open("log_." + day + "_.txt", 'w+')
-        logdata.write(info + "\n")
+    logdata = open("log_." + day + "_.txt", 'w+')
+    logdata.write(info + "\n")
     logdata.close()
 
 
