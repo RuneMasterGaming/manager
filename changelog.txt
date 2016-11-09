@@ -1,13 +1,15 @@
-Beta-0.9.532:
+Beta-0.9.605:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
 Currently only fully supported on linux
 Windows may work but no garuntees, please contact me about bugs
 
-- Added more GUI Goodness
+- Added Database creation helper
+
+- Fixed bugs
 
 [To-do]:
-- Full gui support on linux 80%
+- Full gui support on linux 90%
 - Working semi gui port for windows
-- Reoptimize code to make it more secure 50%
+- Reoptimize code to make it more secure 60%
