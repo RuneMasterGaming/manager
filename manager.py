@@ -1,4 +1,4 @@
-import os, time, urllib.request, io, webbrowser, getpass, socket, zipfile
+import os, time, urllib.request, io, webbrowser, getpass, socket, zipfile, datetime
 from binascii import hexlify, unhexlify
 from sys import platform
 true = 'true'
@@ -8,15 +8,12 @@ if triffle == 'getcoffeebeforestarting':
     print("Triffle if you encounter a bug please screenshot the error from the terminal and send it to me.")
 
 global cversion
-cversion = '0.9.605.beta'
+cversion = '0.9.612.beta'
 
 def log(info):
+    day = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     info = str(info)
-    if os.path.isfile('./log.txt'):
-        logdata = open("log.txt", 'a')
-        logdata.write(info + "\n")
-    else:
-        logdata = open("log.txt", 'w+')
+        logdata = open("log_." + day + "_.txt", 'w+')
         logdata.write(info + "\n")
     logdata.close()
 
