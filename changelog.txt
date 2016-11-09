@@ -1,4 +1,4 @@
-Beta-0.9.612:
+Beta-0.9.623:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
@@ -8,7 +8,7 @@ Windows may work but no garuntees, please contact me about bugs
 - Added better logging system
 - Added Database creation helper
 
-- Fixed bugs
+- Fixed issue with new logger
 
 [To-do]:
 - Full gui support on linux 90%
