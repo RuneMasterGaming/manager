@@ -1,5 +1,6 @@
 import os, time, urllib.request, io, webbrowser, getpass, socket, zipfile
 from binascii import hexlify, unhexlify
+from simplecrypt import encrypt, decrypt
 
 def updater():
     print("""[New Updater]
