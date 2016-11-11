@@ -1,6 +1,7 @@
 import os, time, urllib.request, io, webbrowser, getpass, socket, zipfile
 from binascii import hexlify, unhexlify
 from simplecrypt import encrypt, decrypt
+from sys import platform
 
 def updater():
     print("""[New Updater]
@@ -85,10 +86,12 @@ sit back, relax and press enter when asked.""")
         pt4str = str(pt4u)
 
         ourpowerscombined = str(pt1str + pt2str + pt3str + pt4str)
+
         OhBoy = unhexlify(ourpowerscombined)
         OHSHIT = decrypt(k5, OhBoy)
         AHHHHH = OHSHIT.decode('utf8')
         REEEEEE = str(AHHHHH)
+        updatedata = 0
         for filename in os.listdir("."):
             if (filename == "manager.py") and (updatedata == 0):
                 archive = str("manager-" + cversion + '.zip')
@@ -98,10 +101,10 @@ sit back, relax and press enter when asked.""")
                 if os.path.isfile("./manager.py"):
                     os.remove("manager.py")
                 time.sleep(1)
-                phewimokaynow = open('manager.py', 'w+')
-                phewimokaynow.write(REEEEEE)
-                phewimokaynow.close()
                 updatedata = 1
+        phewimokaynow = open('manager.py', 'w+')
+        phewimokaynow.write(REEEEEE)
+        phewimokaynow.close()
         time.sleep(1)
         print("Update Complete")
         if platform == 'linux':
