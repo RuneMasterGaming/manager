@@ -1,16 +1,20 @@
-Beta-0.9.635:
+Beta-0.9.807:
 Warning As this is a Beta use at your own risk!
 
 [Important]:
-Currently only fully supported on linux
-Windows may work but no garuntees, please contact me about bugs
+Fully Supported on Linux and Windows
 
-- Added better logging system
-- Added Database creation helper
+[Note]:
+Windows support may vary
 
-- Fixed issue with new logger
+- Windows Support is here, contact me for how to get working
+- This update and all future updates will be done in 4 parts that require a key
+
+- Fixed Gui
+- Even Better Logging system
+
 
 [To-do]:
 - Full gui support on linux 90%
-- Working semi gui port for windows
-- Reoptimize code to make it more secure 60%
+- Working semi gui port for windows - 75%
+- Reoptimize code to make it more secure 80%
