@@ -13,7 +13,6 @@ Windows support may vary
 - Fixed Gui
 - Even Better Logging system
 
-
 [To-do]:
 - Full gui support on linux 90%
 - Working semi gui port for windows - 75%
