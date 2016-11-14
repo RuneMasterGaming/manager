@@ -1,8 +1,9 @@
-beta-0.9.845:
+beta-0.9.861:
 Use at your own risk!
 
-- Now with better Updater
+- Now Creates Config
+- Decryption keys can be stored anywhere now!
 
 [To-do]:
-- Finish Rewrite - 25%
-- Make code more secure - 80%
+- Finish Rewrite - 35%
+- Make Code More Secure - 80%
