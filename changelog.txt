@@ -1,19 +1,8 @@
-Beta-0.9.823:
-Warning As this is a Beta use at your own risk!
+beta-0.9.845:
+Use at your own risk!
 
-[Important]:
-Fully Supported on Linux and Windows
-
-[Note]:
-Windows support may vary
-
-- Windows Support is here, contact me for how to get working
-- This update and all future updates will be done in 4 parts that require a key
-
-- Fixed Gui
-- Even Better Logging system
+- Now with better Updater
 
 [To-do]:
-- Full gui support on linux 90%
-- Working semi gui port for windows - 75%
-- Reoptimize code to make it more secure 80%
+- Finish Rewrite - 25%
+- Make code more secure - 80%
