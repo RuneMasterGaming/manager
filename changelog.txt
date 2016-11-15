@@ -1,9 +1,11 @@
-beta-0.9.861:
+beta-0.9.883:
 Use at your own risk!
+[Note]:
+Currently adding accounts doesn't work
 
-- Now Creates Config
-- Decryption keys can be stored anywhere now!
+- Password vault is now working
+- Added gui for password vault
 
 [To-do]:
-- Finish Rewrite - 35%
-- Make Code More Secure - 80%
+- Finish Rewrite - 50%
+- Make code more secure - 85%
