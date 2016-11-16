@@ -3,7 +3,5 @@ Use at your own risk!
 [Important]:
 Untested Fix
 
-- Trying Untested Fix
 
 [To-do]:
-- Redoing code - 50%
