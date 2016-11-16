@@ -1,11 +1,9 @@
-beta-0.9.883:
+beta-0.9.885:
 Use at your own risk!
-[Note]:
-Currently adding accounts doesn't work
+[Important]:
+Untested Fix
 
-- Password vault is now working
-- Added gui for password vault
+- Trying Untested Fix
 
 [To-do]:
-- Finish Rewrite - 50%
-- Make code more secure - 85%
+- Redoing code - 50%
